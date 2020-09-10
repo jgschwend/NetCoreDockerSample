@@ -1,13 +1,6 @@
 version: '3.4'
 
 services:
-  db.local:
-    image: postgres
-    environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
 
   frontend:
     image: ${DOCKER_REGISTRY-}frontend
@@ -16,7 +9,7 @@ services:
       dockerfile: Frontend/Dockerfile
     depends_on:
       - backend
-      - db.local
+      - postgres
 
   backend:
     image: ${DOCKER_REGISTRY-}backend
@@ -24,5 +17,17 @@ services:
       context: .
       dockerfile: Backend/Dockerfile
     depends_on:
-      - db.local
+      - postgres
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres
+    container_name: postgres_container
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: db
+    ports:
+      - "5432:5432"
     

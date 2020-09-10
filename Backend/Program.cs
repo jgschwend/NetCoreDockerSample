@@ -32,7 +32,12 @@ namespace Backend
                         config
                             .AddJsonFile("appsettings.json", true, true)
                             .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
-                    }).UseStartup<Startup>();
+                    })
+                        .UseKestrel(options =>
+                        {
+                            options.ListenAnyIP(8080);
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }
