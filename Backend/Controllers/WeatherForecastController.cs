@@ -27,18 +27,13 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public WeatherForecast Get()
         {
-            var count = _dbContext.WeatherForecasts.Count();
-
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = count,
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var count = _dbContext.WeatherForecasts.Count();
+            var index = rng.Next(1, count);
+            var weatherForecast = _dbContext.WeatherForecasts.SingleOrDefault(x => x.Id == index);
+            return weatherForecast;
         }
     }
 }
